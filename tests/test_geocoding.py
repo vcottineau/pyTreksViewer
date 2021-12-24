@@ -41,7 +41,10 @@ class GeocodingModelCase(unittest.TestCase):
         marker_1 = Marker(name="Marker_1", latitude=45.177879, longitude=5.718545)
         marker_2 = Marker(name="Marker_2", latitude=47.058606, longitude=-0.883084)
 
-        path, distance, ascent, descent = ors_client.directions([marker_1, marker_2], ors_profile['Cycling'], ors_preference['Shortest'])
+        _, distance, ascent, descent = ors_client.directions(
+            [marker_1, marker_2],
+            ors_profile['Cycling'],
+            ors_preference['Shortest'])
 
         self.assertEqual(distance, 614127.0)
         self.assertEqual(ascent, 5487.2)

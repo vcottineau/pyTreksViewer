@@ -28,7 +28,7 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
     def __repr__(self):
-        return '<User {}>'.format(self.username)
+        return f"<User {self.username}>"
 
 
 @login_manager.user_loader
@@ -45,13 +45,13 @@ class Trek(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     mode_id = db.Column(db.Integer, db.ForeignKey('profile.id'))
-    option_id = db.Column(db.Integer, db.ForeignKey('preference.id'))    
+    option_id = db.Column(db.Integer, db.ForeignKey('preference.id'))
 
     routes = db.relationship('Route',
         backref=db.backref('trek'),
         order_by='Route.position',
         collection_class=ordering_list('position'))
-    
+
     def __init__(self, **kwargs):
         super(Trek, self).__init__(**kwargs)
         if self.profile is None:
@@ -60,7 +60,7 @@ class Trek(db.Model):
             self.preference = Preference.query.filter_by(default=True).first()
 
     def __repr__(self):
-        return '<Trek {}>'.format(self.name)
+        return f"<Trek {self.name}>"
 
 
 class Route(db.Model):
@@ -76,7 +76,7 @@ class Route(db.Model):
 
     trek_id = db.Column(db.Integer, db.ForeignKey('trek.id'))
     mode_id = db.Column(db.Integer, db.ForeignKey('profile.id'))
-    option_id = db.Column(db.Integer, db.ForeignKey('preference.id'))    
+    option_id = db.Column(db.Integer, db.ForeignKey('preference.id'))
 
     _markers = db.relationship('RouteMarker',
         order_by='RouteMarker.position',
@@ -84,9 +84,6 @@ class Route(db.Model):
 
     markers = association_proxy('_markers', 'marker',
         creator=lambda m: RouteMarker(marker=m))
-
-    def __init__(self, **kwargs):
-        super(Route, self).__init__(**kwargs)
 
 
 class Marker(db.Model):
@@ -100,11 +97,8 @@ class Marker(db.Model):
     elevation = db.Column(db.Float)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
-    def __init__(self, **kwargs):
-        super(Marker, self).__init__(**kwargs)
-
     def __repr__(self):
-        return '<Marker {}>'.format(self.name)
+        return f"<Marker {self.name}>"
 
 
 class RouteMarker(db.Model):
@@ -132,7 +126,7 @@ class Profile(db.Model):
 
     treks = db.relationship('Trek', backref='profile', lazy='dynamic')
     routes = db.relationship('Route', backref='profile', lazy='dynamic')
-    
+
     @staticmethod
     def insert_modes():
         modes = ['Driving', 'Cycling', 'Walking', 'Hicking']
@@ -144,9 +138,9 @@ class Profile(db.Model):
             profile.default = (profile.name == default_mode)
             db.session.add(profile)
         db.session.commit()
-    
+
     def __repr__(self):
-        return '<Profile {}>'.format(self.name)
+        return f"<Profile {self.name}>"
 
 
 class Preference(db.Model):
@@ -159,7 +153,7 @@ class Preference(db.Model):
 
     treks = db.relationship('Trek', backref='preference', lazy='dynamic')
     routes = db.relationship('Route', backref='preference', lazy='dynamic')
-    
+
     @staticmethod
     def insert_options():
         options = ['Fastest', 'Shortest', 'Recommended']
@@ -173,4 +167,4 @@ class Preference(db.Model):
         db.session.commit()
 
     def __repr__(self):
-        return '<Preference {}>'.format(self.name)
+        return f"<Preference {self.name}>"

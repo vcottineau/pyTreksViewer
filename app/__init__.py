@@ -1,4 +1,6 @@
 import os
+import logging
+from logging.handlers import RotatingFileHandler
 
 
 from flask import Flask
@@ -9,8 +11,6 @@ from flask_login import LoginManager
 
 
 from config import Config
-import logging
-from logging.handlers import RotatingFileHandler
 
 
 db = SQLAlchemy()
@@ -29,7 +29,7 @@ def create_app(config_class=Config):
     db.init_app(app)
     migrate.init_app(app, db)
     bootstrap.init_app(app)
-    
+
     login_manager.init_app(app)
 
     from app.main import bp as main_bp

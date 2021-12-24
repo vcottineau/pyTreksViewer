@@ -83,7 +83,7 @@ class RouteModelCase(unittest.TestCase):
 
         route.markers.remove(marker)
         self.assertEqual(len(route.markers), 0)
-       
+
     def test_mode(self):
         route = Route()
         route.profile = Profile.query.filter_by(default=True).first()

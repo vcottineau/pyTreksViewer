@@ -1,11 +1,8 @@
 import unittest
 
 
-from faker import Faker
-
-
 from app import create_app, db
-from app.models import User, Trek, Route, Profile, Preference
+from app.models import Trek, Route, Profile, Preference
 from config import Config
 
 

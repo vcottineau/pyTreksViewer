@@ -1,9 +1,6 @@
 import unittest
 
 
-from faker import Faker
-
-
 from app import create_app, db
 from app.models import Marker
 from config import Config
