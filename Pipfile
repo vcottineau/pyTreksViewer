@@ -11,6 +11,7 @@ flask-migrate = "*"
 flask-bootstrap = "*"
 flask-login = "*"
 email-validator = "*"
+openrouteservice = "*"
 
 [dev-packages]
 pylint = "*"
