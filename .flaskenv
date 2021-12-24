@@ -1,0 +1,2 @@
+FLASK_APP=pytreksviewer.py
+FLASK_ENV=development
