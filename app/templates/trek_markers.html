@@ -25,12 +25,12 @@
             Route: {{ route.name }}
         </a>
     </div>
-    <div id="route-{{ route.id }}" class=" collapse in">
+    <div id="route-{{ route.id }}" class="panel-collapse collapse in">
         <div class="panel-body">
             <button type="button" class="btn btn-primary btn-modal" data-toggle="modal"
                 data-url="{{ url_for('main.add_trek_route_marker', trek_id=trek.id, route_id=route.id) }}">Add a new marker</button>
         </div>
-        <table class="table table-hover" id="markersTable">
+        <table class="table table-hover" id="trekMarkersTable">
             <thead>
                 <tr>
                     <th></th>

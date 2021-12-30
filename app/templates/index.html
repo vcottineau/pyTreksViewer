@@ -19,6 +19,13 @@
         <li class="active">Maps</li>
     </ol>
 </div>
+{% if user.treks|count == 3 %}
+<div class="jumbotron">
+    <h1>Hello, {{ user.username }}!</h1>
+    <p>...</p>
+    <p><a class="btn btn-primary btn-lg" href="#" role="button">Add</a></p>
+  </div>
+{% endif %}
 {% for trek in user.treks %}
 <div class="panel panel-primary">
     <div class="panel-heading" role="tab">
@@ -26,13 +33,13 @@
             Trek: {{ trek.name }}
         </a>
     </div>
-    <div id="trek-{{ trek.id }}" class=" collapse in">
+    <div id="trek-{{ trek.id }}" class="panel-collapse collapse in">
         <div class="panel-body">
             <div class="row">
-                <div class="col-md-9" style="height:300px">
+                <div class="col-md-7" style="height:300px">
                     <div id="map-{{ trek.id }}" style="height: 300px"></div>
                 </div>
-                <div class="col-md-3" style="height:300px">
+                <div class="col-md-5" style="height:300px">
                     <canvas id="chart-{{ trek.id }}"></canvas>                        
                 </div>
             </div>
@@ -91,7 +98,7 @@
             markerArray.push(L.marker([{{ marker.latitude }}, {{ marker.longitude }}])
             .bindPopup("<b>Name: {{ marker.name }}</b></br>Address: {{ marker.address }}</br>Elevation: {{ marker.elevation}} m"))
         {% endfor %}
-        var polyline = {{ route.geometry() }}
+        var polyline = {{ route.coordinates() }}
         var polyline = L.polyline(polyline).addTo(map);
     {% endfor %}
     var group = L.featureGroup(markerArray).addTo(map);
@@ -99,30 +106,38 @@
 
     var ctx = document.getElementById('chart-{{ trek.id }}').getContext('2d');
     var myChart = new Chart(ctx, {
-        type: 'bar',
+        type: 'scatter',
         data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green'],
             datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)'
-                ],
-                borderWidth: 1
+                label: 'Elevation profile',
+                data: JSON.parse('{{ trek.elevation_profile() | tojson }}'),
+                backgroundColor: 'rgb(255, 99, 132)',
+                pointRadius: 0,
+                showLine: true
             }]
         },
         options: {
+            plugins: {
+                legend: {
+                    display: false,
+                }
+            },
             scales: {
+                x: {
+                    title: {
+                        text: 'Distance (km)',
+                        padding: 0,
+                        display: true
+                    },
+                    type: 'linear',
+                    beginAtZero: true
+                },
                 y: {
+                    title: {
+                        text: 'Elevation (m)',
+                        padding: 0,
+                        display: true
+                    },
                     beginAtZero: true
                 }
             },

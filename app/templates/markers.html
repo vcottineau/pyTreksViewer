@@ -19,11 +19,11 @@
 {% for folder in folders %}
 <div class="panel panel-primary">
     <div class="panel-heading" role="tab">
-        <a class="btn btn-primary" data-toggle="collapse" data-target="#folder-{{ folder.id }}"  aria-controls="collapseOne">
+        <a class="btn btn-primary" data-toggle="collapse" data-target="#folder-{{ folder.id }}"  aria-controls="#folder-{{ folder.id }}">
             Folder: {{ folder.name }}
         </a>
     </div>
-    <div id="folder-{{ folder.id }}" class=" collapse in">
+    <div id="folder-{{ folder.id }}" class="panel-collapse collapse in">
         <div class="panel-body">
             <button type="button" class="btn btn-primary btn-modal" data-toggle="modal"
                 data-url="{{ url_for('main.add_marker') }}">Add a new marker</button>

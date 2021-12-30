@@ -12,6 +12,13 @@ from app.main.forms import TrekForm, TrekRouteForm, TrekRouteMarkerForm, MarkerF
 from app.models import User, Trek, Route, Marker, Profile, Preference, Country, Folder
 
 
+
+# @app.template_filter()
+# def commafy(value):
+#     value = float(value)
+#     return "${:,.2f}".format(value)
+
+
 @bp.route('/', methods=['GET'])
 @bp.route('/index', methods=['GET'])
 @login_required

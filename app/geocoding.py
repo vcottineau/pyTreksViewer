@@ -90,8 +90,8 @@ class ORSClient:
 
     def haversine(self, coord1, coord2):
         r = 6372800
-        lon1, lat1 = (coord1[0], coord1[1])
-        lon2, lat2 = (coord2[0], coord2[1])
+        lat1, lon1 = (coord1[0], coord1[1])
+        lat2, lon2 = (coord2[0], coord2[1])
 
         phi1, phi2 = math.radians(lat1), math.radians(lat2)
         dphi = math.radians(lat2 - lat1)

@@ -81,6 +81,24 @@ class Trek(db.Model):
     def nb_markers(self):
         return sum(len(route.markers) for route in self.routes)
 
+    def elevation_profile(self):
+        coordinates = []
+        for route in self.routes:
+            coordinates.extend(route.coordinates())
+
+        d = 0
+        p = []
+        p.append({"x": d, "y": coordinates[0][2]})
+        
+        for i in range(1, len(coordinates)):
+            d += ors_client.haversine(
+                [coordinates[i-1][0], coordinates[i-1][1]],
+                [coordinates[i][0], coordinates[i][1]])
+            p.append({"x": d/1000, "y": coordinates[i][2]})
+
+        return p
+
+
     def gpx(self):
         return export_trek_as_gpx(self)
 
@@ -120,7 +138,7 @@ class Route(db.Model):
         if self.preference is None:
             self.preference = Preference.query.filter_by(default=True).first()
 
-    def geometry(self):
+    def coordinates(self):
         return [[marker[1], marker[0], marker[2]] for marker in ors_client.decode_geometry(self.path)]
 
     def update(self):
