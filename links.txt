@@ -1,0 +1,2 @@
+https://quaded.com/flask-bootstrap-modal-w-form-validation/
+https://stackoverflow.com/questions/33438029/flask-bootstrap-remote-modal-post

@@ -1,5 +1,136 @@
 {% extends "base.html" %}
 
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+    <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
+    <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css' rel='stylesheet' />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+{% endblock %}
+
 {% block app_content %}
-    <h1>Home</h1>
+<div class="page-header">
+    <h1>{{ title }}</h1>
+</div>
+<div>
+    <ol class="breadcrumb">
+        <li class="active">{{ user.username }}</li>
+        <li class="active">Maps</li>
+    </ol>
+</div>
+{% for trek in user.treks %}
+<div class="panel panel-primary">
+    <div class="panel-heading" role="tab">
+        <a class="btn btn-primary" data-toggle="collapse" data-target="#trek-{{ trek.id }}"  aria-controls="collapseOne">
+            Trek: {{ trek.name }}
+        </a>
+    </div>
+    <div id="trek-{{ trek.id }}" class=" collapse in">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-9" style="height:300px">
+                    <div id="map-{{ trek.id }}" style="height: 300px"></div>
+                </div>
+                <div class="col-md-3" style="height:300px">
+                    <canvas id="chart-{{ trek.id }}"></canvas>                        
+                </div>
+            </div>
+        </div>
+        <table class="table table-hover id=treksTable">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Distance (km)</th>
+                    <th>Ascent (m)</th>
+                    <th>Descent (m)</th>
+                    <th>Routes (nb)</th>
+                    <th>Markers (nb)</th>
+                    <th>Export</th>
+                    <th>Manage</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr id="{{ trek.id }}">
+                    <td><span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span></td>
+                    <td>{{ trek.name }}</td>
+                    <td>{{ (trek.distance()/1000)|round|int }}</td>
+                    <td>{{ trek.ascent()|round|int }}</td>
+                    <td>{{ trek.descent()|round|int }}</td>
+                    <td><a href="{{ url_for('main.trek_routes', trek_id=trek.id) }}" class="badge">{{ trek.nb_routes() }}</a></td>
+                    <td><a href="{{ url_for('main.trek_markers', trek_id=trek.id) }}" class="badge">{{ trek.nb_markers() }}</a></td>
+                    <td><a href="{{ url_for('main.get_file', trek_id=trek.id) }}" class="btn btn-primary btn-xs" role="button">Gpx</a></td>
+                    <td>
+                        <button type="button" class="btn btn-warning btn-xs btn-modal" data-toggle="modal"
+                            data-url="{{ url_for('main.edit_trek', trek_id=trek.id) }}">Edit</button>
+                        <a href="{{ url_for('main.delete_trek', trek_id=trek.id) }}" class="btn btn-danger btn-xs" role="button">Delete</a>
+                    </td>
+                </tr>
+                </tbody>
+        </table>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+{% for trek in user.treks %}
+    var map = L.map('map-{{ trek.id }}');
+    map.addControl(new L.Control.Fullscreen());
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    var markerArray = [];
+    {% for route in trek.routes %}
+        {% for marker in route.markers %}
+            markerArray.push(L.marker([{{ marker.latitude }}, {{ marker.longitude }}])
+            .bindPopup("<b>Name: {{ marker.name }}</b></br>Address: {{ marker.address }}</br>Elevation: {{ marker.elevation}} m"))
+        {% endfor %}
+        var polyline = {{ route.geometry() }}
+        var polyline = L.polyline(polyline).addTo(map);
+    {% endfor %}
+    var group = L.featureGroup(markerArray).addTo(map);
+    map.fitBounds(group.getBounds());
+
+    var ctx = document.getElementById('chart-{{ trek.id }}').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Red', 'Blue', 'Yellow', 'Green'],
+            datasets: [{
+                label: '# of Votes',
+                data: [12, 19, 3, 5, 2, 3],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            responsive:true,
+            maintainAspectRatio: false,
+            showScale: false
+        }
+    });
+{% endfor %}
+</script>
 {% endblock %}

@@ -32,7 +32,7 @@ class GeocodingModelCase(unittest.TestCase):
         self.assertEqual(marker.longitude, 5.718545)
 
     def test_elevation(self):
-        marker = Marker(name="Marker_1", latitude=45.177879, longitude=5.718545)
+        marker = Marker(name="Marker", latitude=45.177879, longitude=5.718545)
         marker.elevation = ors_client.elevation(marker.latitude, marker.longitude)
 
         self.assertEqual(marker.elevation, 221)
@@ -46,6 +46,6 @@ class GeocodingModelCase(unittest.TestCase):
             ors_profile['Cycling'],
             ors_preference['Shortest'])
 
-        self.assertEqual(distance, 614127.0)
-        self.assertEqual(ascent, 5487.2)
-        self.assertEqual(descent, 5624.1)
+        self.assertEqual(distance, 614081.6)
+        self.assertEqual(ascent, 5498.5)
+        self.assertEqual(descent, 5635.3)

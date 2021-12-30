@@ -1,15 +1,14 @@
 # Python
 __pycache__
 *.py[cod]
+fake.py
 
 #IDE
 .vscode
+*.code-workspace
 
 # Unit test
 .coverage
-
-# Documentation
-docs
 
 # Logs
 logs

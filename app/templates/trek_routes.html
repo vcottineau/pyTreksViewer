@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+<div class="page-header">
+    <h1>{{ title }}</h1>
+</div>
+<div>
+    <ol class="breadcrumb">
+        <li class="active">{{ trek.user.username }}</li>
+        <li><a href="{{ url_for('main.treks') }}">Treks</a></li>
+        <li class="active">Routes</li>
+    </ol>
+</div>
+<div class="panel panel-primary">
+    <div class="panel-heading" role="tab">
+        <a class="btn btn-primary" data-toggle="collapse" data-target="#trek-{{ trek.id }}"  aria-controls="collapseOne">
+            Trek: {{ trek.name }}
+        </a>
+    </div>
+    <div id="trek-{{ trek.id }}" class=" collapse in">
+        <div class="panel-body">
+            <button type="button" class="btn btn-primary btn-modal" data-toggle="modal"
+                data-url="{{ url_for('main.add_trek_route', trek_id=trek.id) }}">Add a new route</button>
+        </div>
+        <table class="table table-hover id=routesTable">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Route</th>
+                    <th>Distance (km)</th>
+                    <th>Ascent (m)</th>
+                    <th>Descent (m)</th>
+                    <th>Profile</th>
+                    <th>Preference</th>
+                    <th>Markers (nb)</th>
+                    <th>Manage</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for route in trek.routes %}
+                <tr id="{{ route.id }}">
+                    <td><span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span></td>
+                    <td>{{ route.name }}</td>
+                    <td>{{ (route.distance/1000)|round|int if route.distance is not none else 0 }}</td>
+                    <td>{{ route.ascent|round|int if route.ascent is not none else 0 }}</td>
+                    <td>{{ route.descent|round|int if route.descent is not none else 0 }}</td>
+                    <td>{{ route.profile.name }}</td>
+                    <td>{{ route.preference.name }}</td>
+                    <td><a href="{{ url_for('main.trek_route_markers', trek_id=trek.id, route_id=route.id) }}" class="badge">{{ route.nb_markers() }}</a></td>
+                    <td>
+                        <button type="button" class="btn btn-warning btn-xs btn-modal" data-toggle="modal"
+                            data-url="{{ url_for('main.edit_trek_route', trek_id=trek.id, route_id=route.id) }}">Edit</button>
+                        <a href="{{ url_for('main.delete_trek_route', trek_id=trek.id, route_id=route.id) }}" class="btn btn-danger btn-xs" role="button">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

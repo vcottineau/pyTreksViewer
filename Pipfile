@@ -12,6 +12,7 @@ flask-bootstrap = "*"
 flask-login = "*"
 email-validator = "*"
 openrouteservice = "*"
+gpxpy = "*"
 
 [dev-packages]
 pylint = "*"
@@ -19,6 +20,7 @@ pylint-flask = "*"
 pylint-flask-sqlalchemy = "*"
 python-dotenv = "*"
 faker = "*"
+coverage = "*"
 
 [requires]
-python_version = "3.9"
+python_version = "3.10"

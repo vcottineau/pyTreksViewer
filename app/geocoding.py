@@ -7,6 +7,8 @@ from openrouteservice.convert import decode_polyline
 from openrouteservice.geocode import pelias_search
 from openrouteservice.elevation import elevation_point
 from openrouteservice.directions import directions
+import gpxpy
+import gpxpy.gpx
 
 from config import Config
 
@@ -102,3 +104,28 @@ class ORSClient:
 
 
 ors_client = ORSClient()
+
+
+def export_trek_as_gpx(trek):
+    gpx = gpxpy.gpx.GPX()
+
+    gpx.author_name = trek.user.username
+    gpx.author_email = trek.user.email
+    gpx.name = trek.name
+
+    for route in trek.routes:
+        gpx_track = gpxpy.gpx.GPXTrack()
+        gpx_track.name = route.name
+        gpx.tracks.append(gpx_track)
+
+        gpx_segment = gpxpy.gpx.GPXTrackSegment()
+        gpx_track.segments.append(gpx_segment)
+
+        for location in route.geometry():
+            gpx_segment.points.append(gpxpy.gpx.GPXTrackPoint(latitude=location[0], longitude=location[1], elevation=location[2]))
+
+        for marker in route.markers:
+            gpx_waypoint = gpxpy.gpx.GPXWaypoint(name=marker.name, latitude=marker.latitude, longitude=marker.longitude, elevation=marker.elevation)
+            gpx.waypoints.append(gpx_waypoint)
+
+    return gpx.to_xml()

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+{% endblock %}
+
+{% block app_content %}
+<div class="page-header">
+    <h1>{{ title }}</h1>
+</div>
+<div>
+    <ol class="breadcrumb">
+        <li class="active">{{ trek.user.username }}</li>
+        <li><a href="{{ url_for('main.treks') }}">Treks</a></li>
+        <li><a href="{{ url_for('main.trek_routes', trek_id=trek.id) }}">Routes</a></li>
+        <li class="active">Markers</li>
+    </ol>
+</div>
+{% for route in trek.routes %}
+<div class="panel panel-primary">
+    <div class="panel-heading" role="tab">
+        <a class="btn btn-primary" data-toggle="collapse" data-target="#route-{{ route.id }}"  aria-controls="collapseOne">
+            Route: {{ route.name }}
+        </a>
+    </div>
+    <div id="route-{{ route.id }}" class=" collapse in">
+        <div class="panel-body">
+            <button type="button" class="btn btn-primary btn-modal" data-toggle="modal"
+                data-url="{{ url_for('main.add_trek_route_marker', trek_id=trek.id, route_id=route.id) }}">Add a new marker</button>
+        </div>
+        <table class="table table-hover" id="markersTable">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Country</th>
+                    <th>Address</th>                
+                    <th>Latitude (DD)</th>
+                    <th>Longitude (DD)</th>
+                    <th>Elevation (m)</th>
+                    <th>Manage</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for marker in route.markers %}
+                <tr id="{{ marker.id }}">
+                    <td><span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span></td>
+                    <td>{{ marker.name }}</td>
+                    <td>{{ marker.country.name }}</td>
+                    <td>{{ marker.address }}</td>                                
+                    <td>{{ marker.latitude|round(2) }}</td>
+                    <td>{{ marker.longitude|round(2) }}</td>
+                    <td>{{ marker.elevation|round|int }}</td>
+                    <td>
+                        <a href="{{ url_for('main.delete_trek_route_marker', trek_id=trek.id, route_id=route.id, marker_id=marker.id, show_all=1) }}" class="btn btn-danger btn-xs" role="button">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,15 @@
+{% import "bootstrap/wtf.html" as wtf %}
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">{{ title }}</h4>
+</div>
+<div class="modal-body">
+    {% if marker_id %}
+    {{ wtf.quick_form(form, action=url_for('main.edit_trek_route_marker', trek_id=trek_id, route_id=route_id, marker_id=marker_id), id="ModalForm") }}
+    {% else %}
+    {{ wtf.quick_form(form, action=url_for('main.add_trek_route_marker', trek_id=trek_id, route_id=route_id), id="ModalForm") }}
+    {% endif %}
+</div>
