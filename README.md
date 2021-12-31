@@ -13,8 +13,8 @@ pipenv update --dev
 - Add environment variables to .env file:
 
 ```
-SECRET_KEY=d9ce2a7949f6485185a58dacae8e8490
-ORS_TOKEN=492d994621b34f4fab436de2779782fc
+SECRET_KEY=YOUR_SECRET_KEY
+ORS_TOKEN=YOUR_ORS_API_KEY
 ```
 
 - Init SQLite database:
