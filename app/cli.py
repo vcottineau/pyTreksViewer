@@ -50,3 +50,12 @@ def register(app):
     def report():
         if os.system('coverage report -m'):
             raise RuntimeError('')
+
+    @app.cli.group()
+    def doc():
+        pass
+
+    @doc.command()
+    def generate():
+        if os.system('./schemaspy/schemaspy'):
+            raise RuntimeError('')
