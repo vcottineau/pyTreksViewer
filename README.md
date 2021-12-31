@@ -14,7 +14,7 @@ pipenv update --dev
 
 ```
 SECRET_KEY=d9ce2a7949f6485185a58dacae8e8490
-ORS_TOKEN=d9ce2a7949f6485185a58dacae8e8490
+ORS_TOKEN=492d994621b34f4fab436de2779782fc
 ```
 
 - Init SQLite database:
