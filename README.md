@@ -17,7 +17,7 @@ SECRET_KEY=YOUR_SECRET_KEY
 ORS_TOKEN=YOUR_ORS_API_KEY
 ```
 
-- Init SQLite database:
+- Create SQLite database:
 
 ```
 flask sqlite create
@@ -27,7 +27,6 @@ flask sqlite create
 - Run the appplication:
 
 ```flask run```
-
 
 ## Documentation
 ![SchemaSpy_ERD.png](../master/docs/SchemaSpy_ERD.png)
