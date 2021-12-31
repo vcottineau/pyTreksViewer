@@ -10,7 +10,7 @@
 pipenv update --dev
 ```
 
-- Add environment variables to .env file:
+- Add environment variables to .env file and set values:
 
 ```
 SECRET_KEY=YOUR_SECRET_KEY
