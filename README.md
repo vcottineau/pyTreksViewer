@@ -20,16 +20,8 @@ ORS_TOKEN=YOUR_ORS_API_KEY
 - Init SQLite database:
 
 ```
-flask db init
-flask db migrate
-flask db upgrade
+flask sqlite create
 ```
-
-- Run the following SQL scripts:
-[profile.sql](../master/docs/scripts/profile.sql)
-[preference.sql](../master/docs/scripts/preference.sql)
-[country.sql](../master/docs/scripts/country.sql)
-[folder.sql](../master/docs/scripts/folder.sql)
 
 ## Usage
 - Run the appplication:

@@ -18,9 +18,6 @@ class TrekModelCase(unittest.TestCase):
         self.app_context.push()
         db.create_all()
 
-        Profile.insert_modes()
-        Preference.insert_options()
-
     def tearDown(self):
         db.session.remove()
         db.drop_all()
@@ -80,16 +77,6 @@ class TrekModelCase(unittest.TestCase):
 
         trek.routes.remove(route)
         self.assertEqual(len(trek.routes), 0)
-
-    def test_mode(self):
-        trek = Trek(name='Trek')
-        trek.profile = Profile.query.filter_by(default=True).first()
-        self.assertEqual(trek.profile.name, 'Cycling')
-
-    def test_option(self):
-        trek = Trek(name='Trek')
-        trek.preference = Preference.query.filter_by(default=True).first()
-        self.assertEqual(trek.preference.name, 'Shortest')
 
 
 if __name__ == '__main__':

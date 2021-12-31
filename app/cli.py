@@ -2,6 +2,10 @@ import os
 import click
 
 
+from flask import current_app
+from sqlalchemy import text
+
+
 from app import db
 
 
@@ -38,24 +42,53 @@ def register(app):
             raise RuntimeError('compile command failed')
 
     @app.cli.group()
+    def sqlite():
+        """Run SQLite commands."""
+        pass
+
+    @sqlite.command()
+    def create():
+        """Create the initial database."""
+        db.drop_all()
+        db.create_all()
+
+        scripts = [
+            './docs/scripts/country.sql',
+            './docs/scripts/folder.sql',
+            './docs/scripts/preference.sql',
+            './docs/scripts/profile.sql'
+        ]
+        
+        for script in scripts:
+            with open(script) as f:
+                script_file = f.read()
+                for statement in script_file.split(';'):
+                    db.session.execute(statement)
+                    
+    @app.cli.group()
     def test():
+        """Unit testing framework commands."""
         pass
 
     @test.command()
     def run():
+        """Run unit testing framework."""
         if os.system('coverage run -m unittest discover'):
             raise RuntimeError('')
 
     @test.command()
     def report():
+        """Report unit testing framework."""
         if os.system('coverage report -m'):
             raise RuntimeError('')
 
     @app.cli.group()
     def doc():
+        """Build documentation."""
         pass
 
     @doc.command()
     def generate():
+        "Generate entity relationship diagram."
         if os.system('./schemaspy/schemaspy'):
             raise RuntimeError('')
