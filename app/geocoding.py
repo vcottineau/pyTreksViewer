@@ -121,7 +121,7 @@ def export_trek_as_gpx(trek):
         gpx_segment = gpxpy.gpx.GPXTrackSegment()
         gpx_track.segments.append(gpx_segment)
 
-        for location in route.geometry():
+        for location in route.coordinates():
             gpx_segment.points.append(gpxpy.gpx.GPXTrackPoint(latitude=location[0], longitude=location[1], elevation=location[2]))
 
         for marker in route.markers:

@@ -114,10 +114,11 @@ def edit_trek_route(trek_id, route_id):
         route.name = form.name.data
         profile = Profile.query.get(form.profile.data)
         preference = Preference.query.get(form.preference.data)
-        if route.profile.id != profile or route.preference.id != preference:
+        if route.profile.id != profile.id or route.preference.id != preference.id:
             route.profile = profile
             route.preference = preference
-            route.update()
+            if len(route.markers) > 1:
+                route.update()
         db.session.commit()
         flash('Route has been updated.')
         return jsonify(status='ok')

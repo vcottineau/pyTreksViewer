@@ -86,6 +86,9 @@ class Trek(db.Model):
         for route in self.routes:
             coordinates.extend(route.coordinates())
 
+        if len(coordinates) == 0:
+            return None
+
         d = 0
         p = []
         p.append({"x": d, "y": coordinates[0][2]})
