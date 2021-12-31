@@ -13,8 +13,8 @@ fake.py
 # Logs
 logs
 
-#Samples
-samples
+# SchemaSpy
+schemaspy
 
 # Translations
 *.mo
