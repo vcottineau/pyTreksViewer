@@ -41,7 +41,7 @@ def create_app(config_class=Config):
     if not os.path.exists('logs'):
         os.mkdir('logs')
 
-    file_handler = RotatingFileHandler('logs/pytreksviewer.log', maxBytes=125000, backupCount=10)
+    file_handler = RotatingFileHandler('logs/pytreksviewer.log', maxBytes=1000000, backupCount=10)
     file_handler.setFormatter(logging.Formatter(
         '%(asctime)s %(levelname)s: %(message)s '
         '[in %(pathname)s:%(lineno)d]'))
