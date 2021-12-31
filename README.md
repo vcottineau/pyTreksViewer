@@ -8,6 +8,20 @@ Install and update using [pipenv](https://pypi.org/project/pipenv/):
 
 ```pipenv update --dev```
 
+Add environment variables to .env file:
+
+```SECRET_KEY=d9ce2a7949f6485185a58dacae8e8490```
+```ORS_TOKEN=d9ce2a7949f6485185a58dacae8e8490```
+
+Init SQLite database:
+```flask db init```
+
+Run the following SQL scripts:
+[profile.sql](../master/docs/scripts/profile.sql)
+[preference.sql](../master/docs/scripts/preference.sql)
+[country.sql](../master/docs/scripts/country.sql)
+[folder.sql](../master/docs/scripts/folder.sql)
+
 ## Usage
 Run the appplication:
 
