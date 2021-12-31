@@ -21,6 +21,8 @@ ORS_TOKEN=d9ce2a7949f6485185a58dacae8e8490
 
 ```
 flask db init
+flask db migrate
+flask db upgrade
 ```
 
 - Run the following SQL scripts:
