@@ -21,11 +21,11 @@
         <li class="active">Maps</li>
     </ol>
 </div>
-{% if user.treks|count == 3 %}
+{% if user.treks|count == 0 %}
 <div class="jumbotron">
     <h1>Hello, {{ user.username }}!</h1>
     <p>...</p>
-    <p><a class="btn btn-primary btn-lg" href="#" role="button">Add</a></p>
+    <p><a class="btn btn-primary btn-lg" href="#" role="button">Start</a></p>
   </div>
 {% endif %}
 {% for trek in user.treks %}
