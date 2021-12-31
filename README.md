@@ -26,7 +26,9 @@ flask sqlite create
 ## Usage
 - Run the appplication:
 
-```flask run```
+```
+flask run
+```
 
 ## Documentation
 ![SchemaSpy_ERD.png](../master/docs/SchemaSpy_ERD.png)

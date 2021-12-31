@@ -49,3 +49,9 @@ class GeocodingModelCase(unittest.TestCase):
         self.assertEqual(distance, 614081.6)
         self.assertEqual(ascent, 5498.5)
         self.assertEqual(descent, 5635.3)
+
+    def test_haversine(self):
+        location_1 = [45.177879, 5.718545]
+        location_2 = [47.058606, -0.883084]
+
+        self.assertEqual(int(ors_client.haversine(location_1, location_2)), 550064)

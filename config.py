@@ -10,7 +10,7 @@ class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY')
     ORS_TOKEN = os.environ.get('ORS_TOKEN')
 
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///' + os.path.join(basedir, 'app.db')
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_RECORD_QUERIES = True
     SQLALCHEMY_SLOW_DB_QUERY_TIME = 0.5
